@@ -46,7 +46,6 @@ The design of Airnode and specification details
 - [Ethereum providers](/airnode/ethereum-providers.md)
 - [OIS](/airnode/ois.md)
 - [`config.json`](/airnode/config-json.md)
-- [`security.json`](/airnode/security-json.md)
 - [Airnode ABI specifications](/airnode/airnode-abi-specifications.md)
 - [Reserved parameters](/airnode/reserved-parameters.md)
 
