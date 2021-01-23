@@ -81,8 +81,6 @@ Can be `aws`.
 - `stage` - The label used to distinguish between multiple deployments of the same provider on a cloud provider.
 For example, the provider may make multiple deployments with `stage`s set as `dev`, `ropsten`, `mainnet`, where each of these deployments would use the same private key and have the same `providerId`.
 
-- `logFormat` - The format that Airnode should use to output logs. Either `json` or `plain`.
-
 - `chains` - A list of blockchain configurations. See [chains](#nodesettingschains) below.
 
 ### `nodeSettings.chains`
@@ -96,11 +94,8 @@ Configurations for each chain is represented with an object in this `chains` lis
 
 - `type` - the type of blockchain to connect to. Currently only `evm` is supported for Ethereum and other EVM-based blockchains, although other types are planned to be supported in the future.
 
-- `providers` - one or more providers serving the given chain ID and type. Each `provider` must have the following keys:
-
-  1. `name` - a *unique* name across ALL configured providers in `config.json`
-
-  2. `url` - an HTTP endpoint that Airnode should use to connect to
+- `chainProviders` - the names of blockchain providers serving the given chain ID and type.
+Airnode will expect the URL of these providers in the environment variables as described in the [`environment`](#environment) section.
 
 - `contracts` - An object that keeps the addresses of the contracts deployed on the respective chain.
 It has to include the following contract addresses:
@@ -128,15 +123,9 @@ An example object from the `chains` list:
 {
   "id": 1,
   "type": "evm",
-  "providers": [
-    {
-      "name": "my-infura-mainnet",
-      "url": "https://mainnet.infura.io/v3/<your key>"
-    },
-    {
-      "name": "secondary-mainnet",
-      "url": "https://..."
-    }
+  "chainProviders": [
+    "my-infura-mainnet",
+    "secondary-mainnet"
   ],
   "contracts": {
     "Airnode": "0xf1d4...0bd1",
@@ -144,7 +133,7 @@ An example object from the `chains` list:
   },
   "providerAdminForRecordCreation": "0x5e00...F410",
   "blockHistoryLimit": 300,
-  "minConfirmations": 6,
+  "minConfirmations": 0,
   "ignoreBlockedRequestsAfterBlocks": 20,
 }
 ```
@@ -160,16 +149,12 @@ A more complete example of a `nodeSettings` configuration:
   "cloudProvider": "aws",
   "region": "us-east-1",
   "stage": "testnet",
-  "logFormat": "plain",
   "chains": [
     {
       "id": 1,
       "type": "evm",
-      "providers": [
-        {
-          "name": "infura-mainnet",
-          "url": "https://mainnet.infura.io/v3/<your key>"
-        }
+      "chainProviders": [
+        "infura-mainnet"
       ],
       "providerAdminForRecordCreation": "0x5e00...F410",
       "blockHistoryLimit": 300,
@@ -179,17 +164,17 @@ A more complete example of a `nodeSettings` configuration:
     {
       "id": 3,
       "type": "evm",
-      "providers": [
-        {
-          "name": "infura-ropsten",
-          "url": "https://ropsten.infura.io/v3/<your key>"
-        }
+      "chainProviders": [
+        "infura-ropsten"
       ],
       "contracts": {
         "Airnode": "0xf1d4...0bd1",
         "Convenience": "0x12ab...de56"
       },
-      "providerAdminForRecordCreation": "0x5e00...F410"
+      "providerAdminForRecordCreation": "0x5e00...F410",
+      "blockHistoryLimit": 300,
+      "minConfirmations": 0,
+      "ignoreBlockedRequestsAfterBlocks": 20
     }
   ]
 }
@@ -198,29 +183,63 @@ A more complete example of a `nodeSettings` configuration:
 ## `environment`
 
 Any entry in this list will be set as an environment variable at the node.
-Here are potential entries:
+There are two potential ways these entries can be structured:
 
-- `${OIS_TITLE}_${SECURITY_SCHEME_NAME}`: These are used to define security scheme values (e.g., an API key).
-For example, the [OIS in the docs](/airnode/ois.md) would need to have `myOisTitle_mySecurityScheme1` defined with the value of the API key.
-- `LOG_LEVEL`: Refer to the [logger implementation](https://github.com/api3dao/airnode/blob/102d2d0b7e1ad79b965e31906b9bd14fdd2c17da/packages/node/src/logger.ts#L5-L8) for potential values
-- `MASTER_KEY_MNEMONIC` (YOU ARE NOT RECOMMENDED TO USE THIS): Instead of having the deployer retrieve the master key mnemonic from AWS SSM, you can provide it here yourself.
-
-Example `environment` contents:
+1. Only the name of the environment variable name is defined, and the application that will use the `config.json` file (e.g., the deployer) will look for the value of the variable in its own environment variables under the same name (the deployer is fed environment variables through a [`.env`](https://github.com/api3dao/airnode/blob/master/Docker.md#docker-instructions) file).
 ```json
 {
-  "myOisTitle_mySecurityScheme1": "API_KEY_12ry38hj9gjg",
-  "LOG_LEVEL": "DEBUG"
+  "name": "myEnvironmentVariableName"
 }
 ```
 
-Note that you can also leave the values empty, in which case the deployer will first look for these in your [`.env`](https://github.com/api3dao/airnode/blob/master/Docker.md#docker-instructions) file, and ask you to provide them manually if it cannot find them.
-Example usage:
-
+2. Both the name and the value of the environment variable is defined.
+The application that uses the `config.json` file passes the given value as the environment variable to the node.
 ```json
 {
-  "myOisTitle_mySecurityScheme1": "",
-  "LOG_LEVEL": "DEBUG"
+  "name": "myEnvironmentVariableName",
+  "value": "myEnvironmentVariableValue"
 }
+```
+
+Here are potential environment variable names:
+
+- `SECURITYSCHEME_${OIS_TITLE}_${SECURITY_SCHEME_NAME}`: Used to define the security scheme values (e.g., an API key).
+For example, the [OIS in the docs](/airnode/ois.md) would need to have `SECURITYSCHEME_myOisTitle_mySecurityScheme1` defined.
+
+- `CHAINPROVIDER_${CHAIN_TYPE}_${CHAIN_ID}_${PROVIDER_NAME}`: Used to define the URL of a blockchain provider.
+For example, the [example above](#example) would need to have `CHAINPROVIDER_evm_1_infura-mainnet` and `CHAINPROVIDER_evm_3_infura-ropsten` defined.
+
+- `LOG_LEVEL`: The level that Airnode logs at.
+Either `DEBUG`, `INFO`, `WARN` or `ERROR`.
+
+- `LOG_FORMAT`: The format that Airnode should use to output logs.
+Either `json` or `plain`.
+
+- `MASTER_KEY_MNEMONIC` (YOU ARE NOT RECOMMENDED TO USE THIS): Normally, the deployer retrieves the master key mnemonic from AWS SSM.
+You can use this field to override that functionality.
+
+Example `environment` contents (the blockchain provider URLs will be expected to be provided in the environment variables):
+```json
+[
+  {
+    "name": "SECURITYSCHEME_myOisTitle_mySecurityScheme1",
+    "value": "c2qiuFR5RVrMXmYhunll"
+  },
+  {
+    "name": "CHAINPROVIDER_evm_1_infura-mainnet"
+  },
+  {
+    "name": "CHAINPROVIDER_evm_3_infura-ropsten"
+  },
+  {
+    "name": "LOG_LEVEL",
+    "value": "DEBUG"
+  },
+  {
+    "name": "LOG_FORMAT",
+    "value": "json"
+  }
+]
 ```
 
 ## `id`
