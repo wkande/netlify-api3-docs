@@ -182,7 +182,8 @@ A more complete example of a `nodeSettings` configuration:
         }
       ],
       "contracts": {
-        "Airnode": "0xf1d4...0bd1"
+        "Airnode": "0xf1d4...0bd1",
+        "Convenience": "0x12ab...de56"
       },
       "providerAdminForRecordCreation": "0x5e00...F410"
     }
