@@ -1,12 +1,13 @@
 # `config.json`
 
 `config.json` is the configuration file used for deploying Airnode.
-It is composed of four main sections:
+It is composed of five main sections:
 
 1. `ois`: A list of [OIS](/airnode/ois.md) objects
-2. `triggers`: A list of trigger objects, each mapping to an endpoint defined in an OIS in 1
-3. `nodeSettings`: An object containing node configuration parameters
-4. `id`: A UUID that specifies a `config.json`/`security.json` file pair
+1. `triggers`: A list of trigger objects, each mapping to an endpoint defined in an OIS in 1
+1. `nodeSettings`: An object containing node configuration parameters
+1. `environment`: A list of node environment variables
+1. `id`: A UUID that specifies a `config.json` file
 
 Contents of a `config.json` file:
 
@@ -21,6 +22,9 @@ Contents of a `config.json` file:
   "nodeSettings": {
     ...
   },
+  "environment": [
+    ...
+  ],
   "id": "..."
 }
 ```
@@ -191,8 +195,36 @@ A more complete example of a `nodeSettings` configuration:
 }
 ```
 
+## `environment`
+
+Any entry in this list will be set as an environment variable at the node.
+Here are potential entries:
+
+- `${OIS_TITLE}_${SECURITY_SCHEME_NAME}`: These are used to define security scheme values (e.g., an API key).
+For example, the [OIS in the docs](/airnode/ois.md) would need to have `myOisTitle_mySecurityScheme1` defined with the value of the API key.
+- `LOG_LEVEL`: Refer to the [logger implementation](https://github.com/api3dao/airnode/blob/102d2d0b7e1ad79b965e31906b9bd14fdd2c17da/packages/node/src/logger.ts#L5-L8) for potential values
+- `MASTER_KEY_MNEMONIC` (YOU ARE NOT RECOMMENDED TO USE THIS): Instead of having the deployer retrieve the master key mnemonic from AWS SSM, you can provide it here yourself.
+
+Example `environment` contents:
+```json
+{
+  "myOisTitle_mySecurityScheme1": "API_KEY_12ry38hj9gjg",
+  "LOG_LEVEL": "DEBUG"
+}
+```
+
+Note that you can also leave the values empty, in which case the deployer will first look for these in your [`.env`](https://github.com/api3dao/airnode/blob/master/Docker.md#docker-instructions) file, and ask you to provide them manually if it cannot find them.
+Example usage:
+
+```json
+{
+  "myOisTitle_mySecurityScheme1": "",
+  "LOG_LEVEL": "DEBUG"
+}
+```
+
 ## `id`
 
-A UUID for the specific `config.json` file and its corresponding `security.json` file.
+A UUID for the specific `config.json` file.
 
 [Home](/README.md#airnode)
