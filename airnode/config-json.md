@@ -112,7 +112,7 @@ Note that the node only uses this while creating the provider record.
 Changing this after the provider record is created will not have any effect.
 This field is optional, but not having it means that the node will not be able to create a provider record on the respective chain.
 
-- `blockHistoryLimit` - the number of blocks in the past that Airnode should use to search for requests or events. Defaults to `600` (roughly 1 hour for Ethereum).
+- `blockHistoryLimit` - the number of blocks in the past that Airnode should use to search for requests or events. Defaults to `300` (roughly 1 hour for Ethereum).
 
 - `minConfirmations` - the number of confirmations required for a request or event to be considered valid. Default to `0`.
 
@@ -139,7 +139,7 @@ An example object from the `chains` list:
     "Convenience": "0x12ab...de56"
   },
   "providerAdminForRecordCreation": "0x5e00...F410",
-  "blockHistoryLimit": 600,
+  "blockHistoryLimit": 300,
   "minConfirmations": 6,
   "ignoreBlockedRequestsAfterBlocks": 20,
 }
@@ -168,7 +168,7 @@ A more complete example of a `nodeSettings` configuration:
         }
       ],
       "providerAdminForRecordCreation": "0x5e00...F410",
-      "blockHistoryLimit": 600,
+      "blockHistoryLimit": 300,
       "minConfirmations": 0,
       "ignoreBlockedRequestsAfterBlocks": 20
     },
