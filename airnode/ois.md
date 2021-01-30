@@ -59,7 +59,7 @@ OAS equivalent: `info.title`
   ],
   "components": {
     "securitySchemes": {
-      "mySecurityScheme1": {
+      "mySecurityScheme": {
         "type": "apiKey",
         "name": "X-MY-API-KEY",
         "in": "query"
@@ -67,7 +67,7 @@ OAS equivalent: `info.title`
     }
   },
   "security": {
-    "mySecurityScheme1": []
+    "mySecurityScheme": []
   },
   "paths": {
     "/myPath": {
@@ -141,7 +141,7 @@ Each security scheme maps to an empty list as:
 
 ```json
 "security": {
-  "mySecurityScheme1": []
+  "mySecurityScheme": []
 }
 ```
 
