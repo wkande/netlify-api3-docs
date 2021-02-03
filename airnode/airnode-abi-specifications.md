@@ -37,7 +37,7 @@ Note that dynamically-sized types are represented with uppercase letters, and st
 
 ## Encoding format
 
-Airnode ABI specifications has the following encoding format:
+Airnode ABI specifications has the following encoding format (which is somewhat similar to [SDS](https://github.com/antirez/sds)):
 
 ```
 [------------------------][-----------------------------------------]
