@@ -37,7 +37,7 @@ docker run -it --rm \
   --env-file .env \
   --env COMMAND=deploy-first-time \
   -v $(pwd):/airnode/out \
-  api3/airnode:latest
+  api3/airnode-deployer:pre-alpha
 ```
 
 This will first download the deployer image, which may take a few minutes depending on the speed of your Internet connection.
@@ -55,7 +55,7 @@ This file does not include any sensitive information, so feel free to share it a
 The receipt contains your [`providerId`](/request-response-protocol/provider.md#provideid), `providerIdShort` and `masterWalletAddress` that you will need to fund for it to create your provider record (if you have not already).
 You will need to add your `providerIdShort` to your `config.json` to be able to redeploy your node with updated configurations.
 
-To find out how to redeploy your node or remove it from your cloud provider account, see the [deployer image docs](https://github.com/api3dao/airnode/blob/master/Docker.md).
+To find out how to redeploy your node or remove it from your cloud provider account, see the [deployer image docs](https://github.com/api3dao/airnode/blob/pre-alpha/Docker.md).
 Now, the next step is to configure the authorization policies for the endpoints you will be serving.
 
 [Home](/README.md#provider-guides)
