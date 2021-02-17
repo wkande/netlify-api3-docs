@@ -6,10 +6,10 @@ Assuming you have determined that your platform [is compatible](/smart-contract-
 
 *Replace parts starting with `$`*
 
-1. Clone the [Airnode monorepo](https://github.com/api3dao/airnode) (currently you need to sue the `pre-alpha` branch)
+1. Clone the [Airnode monorepo](https://github.com/api3dao/airnode)
 
 ```sh
-git clone --single-branch --branch pre-alpha https://github.com/api3dao/airnode.git
+git clone https://github.com/api3dao/airnode.git
 ```
 
 2. Install its dependencies and build it
