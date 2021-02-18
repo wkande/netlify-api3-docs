@@ -84,7 +84,7 @@ Now follow the steps below to make a test call:
 git clone https://github.com/api3dao/airnode-starter.git
 ```
 
-2. Open the [`config.json`](https://github.com/api3dao/airnode-starter/blob/main/config/config.example.json) file in `config/`.
+2. Open the [`config.example.json`](https://github.com/api3dao/airnode-starter/blob/main/config/config.example.json) file in `config/`.
 Replace the following values:
 
     - `nodeSettings.chains.0.id`: `3` -> The ID of your chain
