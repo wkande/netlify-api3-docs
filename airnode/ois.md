@@ -7,6 +7,8 @@
 *The OAS equivalents given are used to automatically populate OIS fields.
 These prepopulated fields are expected to be reviewed and customized by the integrating party.*
 
+*All URLs are absolute (i.e., [relative URLs](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md#relative-references-in-urls) are not supported).*
+
 - [`oisFormat`](#1-oisFormat)
 - [`title`](#2-title)
 - [`version`](#3-version)
