@@ -130,7 +130,7 @@ OAS equivalent: `components.securitySchemes.{securitySchemeName}.in`
 (Required if security scheme `type` is `http`) The name of the HTTP Authorization scheme to be used in the [Authorization header as defined in RFC7235](https://tools.ietf.org/html/rfc7235#section-5.1).
 
 Allowed values: The values used SHOULD be registered in the [IANA Authentication Scheme registry](https://www.iana.org/assignments/http-authschemes/http-authschemes.xhtml).
-We support `Basic` and `Bearer`.
+We support `basic` and `bearer`.
 
 OAS equivalent: `components.securitySchemes.{securitySchemeName}.scheme`
 
